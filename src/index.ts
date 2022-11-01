@@ -46,8 +46,13 @@ function lerArquivos(arquivos: string[]) {
        * arquivo no seu computador
        */
 
-      const conteudo = fs.readFileSync(arquivo, { encoding: 'utf-8' })
-      subscriber.next(conteudo) // responsável por mandar a mensagem de sucesso
+      try {
+        const conteudo = fs.readFileSync(arquivo, { encoding: 'utf-8' })
+        subscriber.next(conteudo)
+      } catch (error) {
+        subscriber.error(`Não foi possível ler o arquivo que está no caminho ${arquivo}`)
+      }
+       // responsável por mandar a mensagem de sucesso
       // subscriber.error() // responsável por mandar a mensagem de erro
       // subscriber.complete() // responsável por mandar a mensagem de completo
 
@@ -59,13 +64,15 @@ function lerArquivos(arquivos: string[]) {
        *               e enviou os dados com sucesso
        *   
        *   -> Erro: O Observable teve algum problema durante a sua execução e não conseguiu
-       *            realizar sua tarefa de maneira satisfatória e não conseguiu enviar os dados
+       *            realizar sua tarefa de maneira satisfatória e não conseguiu enviar os dados.
        *            Quando um Observable passa pelo estágio de erro, sua execução para automaticamente
        * 
        *   -> Completo: O Observable realizou TODAS as suas tarefas com sucesso e não possui
        *                mais nenhum dado para poder enviar.
        */
     })
+
+    subscriber.complete()
   })
 
   return leitor
@@ -89,6 +96,13 @@ obs.subscribe(
     console.log('---------- ARQUIVO LIDO COM SUCESSO ----------')
     console.log(conteudoLido)
     console.log('----------------------------------------------\n\n')
+  },
+  (erro) => {
+    console.log('OCORREU UM ERRO NA EXECUÇÃO DO OBSERVABLE')
+    console.log(erro)
+  },
+  () => {
+    console.log('TODOS OS ARQUIVOS FORAM LIDOS COM SUCESSO!!!!')
   }
 )
 
