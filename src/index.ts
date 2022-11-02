@@ -1,5 +1,5 @@
 import path from 'path'
-import { Observable } from 'rxjs'
+import { filter, first, last, map, Observable, take } from 'rxjs'
 import fs from 'fs'
 
 const filePaths: string[] = [
@@ -17,7 +17,7 @@ const filePaths: string[] = [
   path.join(__dirname, 'files', 'estrutura_4.html')
 ]
 
-const isCSS = /^((.|#){0,1}(\w+-{0,1})+\s*{(\s*(\w+-{0,1})+:\s*(\w+\s*)+;\s*)+\s*}\s*)/i
+const isCSS = /^((.|#|:){0,1}(\w+-{0,1})+\s*{(\s*(\w+-{0,1})+:\s*(\w+\s*)+;\s*)+\s*}\s*)/i
 const isHTML = /^<!DOCTYPE html>/i
 
 function lerArquivos(arquivos: string[]) {
@@ -91,7 +91,69 @@ let obs = lerArquivos(filePaths)
  * 3° -> Completo
  */
 
-obs.subscribe(
+/**
+ * Operadores -> Funções que servem para manipular os dados
+ *               que os observables enviam
+ */
+
+/**
+ * Utilizando algum operador do RXJS, vamos extrair a primeira palavra
+ * de cada arquivo
+ */
+
+/**
+ * a função pipe serve para você passar os operadores do RXJS que modificarão
+ * os dados que o Observable retorna para você!
+ */
+
+/**
+ * o operador map() serve para pegar o dado que enviado pelo Observable
+ * e manipulá-lo de alguma forma para que você acesse esse dado modificado 
+ */
+
+/**
+ * De todos os arquivos lidos, utilize um operador do RXJS para pegar
+ * apenas os arquivos de CSS
+ */
+
+/**
+ * o operador filter() serve para filtrar determinadas informações
+ * que o Observable envia
+ */
+
+/**
+ * O operador take() serve para pegar uma quantidade X de dados
+ * que o Observable envia
+ */
+
+obs
+.pipe(
+  /* map((texto) => {
+    return texto.split(' ')[0]
+  }), */
+  /* map((palavra) => {
+    return palavra.length
+  }) */
+  /* filter((txt) => {
+    return !isHTML.test(txt) && !isCSS.test(txt)
+  }) */
+  /* filter((txt) => {
+    return isHTML.test(txt)
+  }) */
+  /* filter((txt) => {
+    return isCSS.test(txt)
+  }) */
+  // take(7)
+  // first()
+  /* first((txt) => {
+    return isHTML.test(txt)
+  }) */
+  // last()
+  /* last((txt) => {
+    return isCSS.test(txt)
+  }) */
+)
+.subscribe(
   (conteudoLido) => {
     console.log('---------- ARQUIVO LIDO COM SUCESSO ----------')
     console.log(conteudoLido)
@@ -106,8 +168,8 @@ obs.subscribe(
   }
 )
 
-obs.subscribe(
+/* obs.subscribe(
   (conteudoLido) => {
     console.log(`Este arquivo possui ${conteudoLido.length} caracteres`)
   }
-)
+) */
